@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Weather Application</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+			crossorigin="anonymous"
+		></script>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+			integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<link rel="stylesheet" href="./index.css" />
+	</head>
+	<body>
+		<div class="content">
+			<div class="search">
+				<button onclick="window.location.reload()"  id="refreshButton"  type="button" class="refresh-icon">
+                <i style="color: rgba(0, 0, 0, 0.427);" class="fa-solid fa-arrow-rotate-right"></i></button>
+				<input
+					id="inputname"
+					type="text"
+					placeholder="enter city name"
+				/>
+				<button type="button" onclick="search()">
+					<i style="color: rgba(0, 0, 0, 0.427);" class="fa-solid fa-magnifying-glass"></i>
+				</button>
+			</div>
+
+			<div id="result" class="weather">
+				<img id="weathericon"
+					src="./gallery/transparent-weather-11-removebg-preview.png"
+					alt=""
+					class="weathericon"
+				/>
+				<h4  class="temp"> <span id="temperature">32</span>°C<span id="cityname" class="city">Kakkanad</span></h4>
+				<h5 id="Description">partially cloudy</h5>
+
+				<div class="details">
+					<div class="col">
+						<img src="" alt="" />
+						<div>
+							<p  class="humidity"><span id="Humidity">50</span>%</p>
+							<p class="second">Humidity</p>
+						</div>
+					</div>
+
+					<div class="col">
+						<img src="" alt="" />
+						<div>
+							<p  class="wind"><span id="Wind">15</span> km/h</p>
+							<p class="second">Wind Speed</p>
+						</div>
+					</div>
+
+					<div class="col">
+						<img src="" alt="" />
+						<div>
+							<p  class="pressure"><span id="Pressure">30</span> Pa</p>
+							<p class="second">Pressure</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="details-2">
+					<div class="col">
+						<img src="" alt="" />
+						<div>
+							<p id="Country" class="country">Country</p>
+                            <p class="second">Country</p>
+						</div>
+					</div>
+
+					<div class="col">
+						<img src="" alt="" />
+						<div>
+							<p id="Timezone" class="timezone">Timezone</p>
+                            <p class="second">Timezone</p>
+						</div>
+					</div>
+
+					<div class="col">
+						<img src="" alt="" />
+						<div>
+							<p id="Date" class="date">Date</p>
+                            <p class="second">Date</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		function search() {
+			let cityname = inputname.value;
+			console.log(cityname);
+
+			if (cityname) {
+				fetch(
+					`https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=89e2e02216276b4e94f3bd0dda287bc7`
+				)
+					.then((response) => {
+						response.json().then((data) => {
+							console.log(data);
+							let far = data.main.temp;
+							let Tem = far-273.15
+                            console.log(Tem);
+                            let Weather=data.weather
+                            for(var wet of Weather){
+                                console.log(wet);
+                                var des = wet.description
+                                var Icon = wet.icon
+                            }
+                            let pre = data.main.pressure
+                            let hum = data.main.humidity
+                            let spe = data.wind.speed
+                            let cou = data.sys.country
+                            let tim = data.timezone
+                            let cit = data.name
+                            console.log(cit);
+
+                            const time = new Date();
+				            console.log(time);
+
+				            let date = time.getDay();
+				            console.log(date);
+                            days =['sun','mon','tue','wed','thu','fri','sat']
+                            
+                            
+				           
+                           
+                            document.getElementById('cityname').innerHTML=cit
+                            document.getElementById('temperature').innerHTML = Tem.toFixed(2)
+                            document.getElementById('Description').innerHTML = des
+                            document.getElementById('weathericon').src = `https://openweathermap.org/img/wn/${Icon}@2x.png`
+                            document.getElementById('Humidity').innerHTML= hum
+                            document.getElementById('Wind').innerHTML= spe
+                            document.getElementById('Pressure').innerHTML=pre
+                            document.getElementById('Country').innerHTML=cou
+                            document.getElementById('Timezone').innerHTML=tim 
+                            document.getElementById('Date').innerHTML= new Date().toDateString()
+
+						});
+					})
+					.catch((error) => {
+						console.log(error);
+					});
+
+				
+			}
+		}
+	</script>
+</html>
